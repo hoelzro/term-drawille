@@ -36,8 +36,14 @@ sub new {
     my ( $class, %params ) = @_;
 
     my ( $width, $height ) = @params{qw/width height/};
-    # XXX detection
-    # XXX rounding to nearest multiple of 2/4?
+
+    unless($width % $HORZ_PIXELS_PER_CELL == 0) {
+        $width = ($width - ($width % $HORZ_PIXELS_PER_CELL)) + $HORZ_PIXELS_PER_CELL;
+    }
+
+    unless($height % $VERT_PIXELS_PER_CELL == 0) {
+        $height = ($height - ($height % $VERT_PIXELS_PER_CELL)) + $VERT_PIXELS_PER_CELL;
+    }
 
     my $grid = [ map { [ (0) x $width ] } ( 1 .. $height ) ];
 
