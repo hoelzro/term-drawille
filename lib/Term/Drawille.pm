@@ -130,6 +130,7 @@ __END__
 
   use Term::Drawille;
 
+  binmode STDOUT, ':encoding(utf8)';
   my $canvas = Term::Drawille->new(
     width  => 400,
     height => 400,
@@ -166,8 +167,9 @@ the pixel at the given position.
 =head2 $canvas->as_string
 
 Draws the canvas as a string of Braille characters and returns it.
-
-XXX encoding
+Note that the string consists of Unicode B<characters> and not raw bytes;
+this means you'll likely have to encode it before sending it to the terminal.
+This may change in future releases.
 
 =head1 SEE ALSO
 
