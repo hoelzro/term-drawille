@@ -136,7 +136,7 @@ __END__
     height => 400,
   );
 
-  print $canvas;
+  print $canvas->as_string;
 
 =head1 DESCRIPTION
 
