@@ -144,6 +144,11 @@ __END__
 
 =head1 DESCRIPTION
 
+L<Text::Drawille> makes use of Braille characters to allow you to draw
+lines, circles, pictures, etc, to your terminal with a surprising amount
+of precision.  It's based on a Python library (L<https://github.com/asciimoo/drawille>);
+its page has some screenshots that demonstrate what it and this module can accomplish.
+
 =head1 METHODS
 
 =head2 Term::Drawille->new(%params)

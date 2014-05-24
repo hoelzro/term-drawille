@@ -20,9 +20,18 @@ version 0.01
     height => 400,
   );
 
-  print $canvas;
+  for(my $i = 0; $i < 400; $i++) {
+    $canvas->set($i, $i, 1);
+  }
+
+  print $canvas->as_string;
 
 =head1 DESCRIPTION
+
+L<Text::Drawille> makes use of Braille characters to allow you to draw
+lines, circles, pictures, etc, to your terminal with a surprising amount
+of precision.  It's based on a Python library (L<https://github.com/asciimoo/drawille>);
+its page has some screenshots that demonstrate what it and this module can accomplish.
 
 =head1 METHODS
 
@@ -73,7 +82,7 @@ the same terms as the Perl 5 programming language system itself.
 =head1 BUGS
 
 Please report any bugs or feature requests on the bugtracker website
-https://github.com/hoelzro/text-drawille/issues
+https://github.com/hoelzro/term-drawille/issues
 
 When submitting a bug or request, please include a test-file or a
 patch to an existing test-file that illustrates the bug or desired
