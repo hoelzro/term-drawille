@@ -67,8 +67,6 @@ sub _height {
 sub set {
     my ( $self, $x, $y, $value );
 
-    # XXX argument checking
-    # XXX bounding checking
     push @_, 1 if @_ == 3;
     ( $self, $x, $y, $value ) = @_;
 
