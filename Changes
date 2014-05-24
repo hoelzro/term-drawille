@@ -1,4 +1,6 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.01 May 24 2014
           - Initial release!  Supports manual dimensions and setting of pixels.
