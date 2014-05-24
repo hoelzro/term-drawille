@@ -1,5 +1,5 @@
 ## no critic (RequireUseStrict)
-package Text::Drawille;
+package Term::Drawille;
 
 ## use critic (RequireUseStrict)
 use strict;
@@ -130,9 +130,9 @@ __END__
 
 =head1 SYNOPSIS
 
-  use Text::Drawille;
+  use Term::Drawille;
 
-  my $canvas = Text::Drawille->new;
+  my $canvas = Term::Drawille->new;
 
   print $canvas;
 
@@ -140,7 +140,7 @@ __END__
 
 =head1 METHODS
 
-=head2 Text::Drawille->new(%params)
+=head2 Term::Drawille->new(%params)
 
 Creates a new canvas to draw on.
 
