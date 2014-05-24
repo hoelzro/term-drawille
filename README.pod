@@ -1,0 +1,82 @@
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Term::Drawille - Draw to your terminal using Braille characters
+
+=head1 VERSION
+
+version 0.01
+
+=head1 SYNOPSIS
+
+  use Term::Drawille;
+
+  binmode STDOUT, ':encoding(utf8)';
+  my $canvas = Term::Drawille->new(
+    width  => 400,
+    height => 400,
+  );
+
+  print $canvas;
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 Term::Drawille->new(%params)
+
+Creates a new canvas to draw on.
+
+Valid key value pairs for C<%params> are:
+
+=head3 width
+
+Specify the width of the canvas in pixels.
+
+=head3 height
+
+Specify the height of the canvas in pixels.
+
+=head2 $canvas->set($x, $y, [$value])
+
+Sets the value of the pixel at (C<$x>, C<$y>) to C<$value>.  If
+C<$value> is omitted, it defaults to C<1>.
+
+The $value is interpreted as a boolean: whether or not to draw
+the pixel at the given position.
+
+=head2 $canvas->as_string
+
+Draws the canvas as a string of Braille characters and returns it.
+Note that the string consists of Unicode B<characters> and not raw bytes;
+this means you'll likely have to encode it before sending it to the terminal.
+This may change in future releases.
+
+=head1 SEE ALSO
+
+L<https://github.com/asciimoo/drawille>
+
+=head1 AUTHOR
+
+Rob Hoelz <rob@hoelz.ro>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Rob Hoelz.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+https://github.com/hoelzro/text-drawille/issues
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
+=cut
