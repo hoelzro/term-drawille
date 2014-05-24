@@ -160,7 +160,8 @@ Specify the height of the canvas in pixels.
 Sets the value of the pixel at (C<$x>, C<$y>) to C<$value>.  If
 C<$value> is omitted, it defaults to C<1>.
 
-XXX clarify what happens with different values
+The $value is interpreted as a boolean: whether or not to draw
+the pixel at the given position.
 
 =head2 $canvas->as_string
 
