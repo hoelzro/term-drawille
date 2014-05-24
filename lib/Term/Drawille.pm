@@ -136,6 +136,10 @@ __END__
     height => 400,
   );
 
+  for(my $i = 0; $i < 400; $i++) {
+    $canvas->set($i, $i, 1);
+  }
+
   print $canvas->as_string;
 
 =head1 DESCRIPTION
