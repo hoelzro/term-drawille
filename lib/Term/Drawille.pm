@@ -130,7 +130,10 @@ __END__
 
   use Term::Drawille;
 
-  my $canvas = Term::Drawille->new;
+  my $canvas = Term::Drawille->new(
+    width  => 400,
+    height => 400,
+  );
 
   print $canvas;
 
@@ -142,7 +145,15 @@ __END__
 
 Creates a new canvas to draw on.
 
-XXX clarify params
+Valid key value pairs for C<%params> are:
+
+=head3 width
+
+Specify the width of the canvas in pixels.
+
+=head3 height
+
+Specify the height of the canvas in pixels.
 
 =head2 $canvas->set($x, $y, [$value])
 
