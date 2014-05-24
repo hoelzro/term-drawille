@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Term::Drawille;
 
 # draw different pixels
@@ -35,3 +35,19 @@ for(my $i = 0; $i < $size; $i++) {
 my $string = $canvas->as_string;
 
 is $string, "⠑⢄⠀⠀\n⠀⠀⠑⢄\n";
+
+# what happens if I have a non-divisible width/length?
+
+$size   = 10;
+$canvas = Term::Drawille->new(
+    width  => $size,
+    height => $size,
+);
+
+for(my $i = 0; $i < $size; $i++) {
+    $canvas->set($i, $i, 1);
+}
+
+$string = $canvas->as_string;
+
+is $string, "⠑⢄⠀⠀⠀\n⠀⠀⠑⢄⠀\n⠀⠀⠀⠀⠑\n";
