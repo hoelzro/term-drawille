@@ -90,13 +90,13 @@ __END__
     $canvas->set($i, $i, 1);
   }
 
-  print $canvas->as_string;
+  $canvas->draw();
 
 =head1 DESCRIPTION
 
 L<Text::Drawille> makes use of Braille characters to allow you to draw
 lines, circles, pictures, etc, to your terminal with a surprising amount
-of precision.  It's based on a Python library (L<https://github.com/asciimoo/drawille>);
+of precision.  It's inspired by a  Python library (L<https://github.com/asciimoo/drawille>);
 its page has some screenshots that demonstrate what it and this module can accomplish.
 
 =head1 METHODS
@@ -118,10 +118,13 @@ Specify the height of the canvas in pixels.
 =head2 $canvas->set($x, $y, [$value])
 
 Sets the value of the pixel at (C<$x>, C<$y>) to C<$value>.  If
-C<$value> is omitted, it defaults to C<1>.
+C<$value> is omitted, it defaults to C<1>. The $value is interpreted
+as a boolean: whether or not to draw the pixel at the given position.
 
-The $value is interpreted as a boolean: whether or not to draw
-the pixel at the given position.
+=head2 $canvas->unset($x, $y)
+
+unSets the value of the pixel at (C<$x>, C<$y>).  uses the function
+above passing $value as 0.
 
 =head2 $canvas->as_string
 
@@ -129,6 +132,15 @@ Draws the canvas as a string of Braille characters and returns it.
 Note that the string consists of Unicode B<characters> and not raw bytes;
 this means you'll likely have to encode it before sending it to the terminal.
 This may change in future releases.
+
+=head2 $canvas->draw
+
+Draws directly to console. UTF8  Encoding is already handled by
+the module so not required.
+
+
+
+
 
 =head1 SEE ALSO
 
