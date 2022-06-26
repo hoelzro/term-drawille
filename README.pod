@@ -72,7 +72,7 @@ C<$canvas->draw($row,$column)> (see below)
 =head3 $canvas->draw(), $canvas->draw($row,$column)
 
 Draws the canvas at specific row and column in ANSI terminals.
-If $canvas->{borderStyle} is specified, then also prints a border
+If C<$canvas->{borderStyle}> is specified, then also prints a border
 
 
 =head1 SEE ALSO
