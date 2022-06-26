@@ -8,19 +8,18 @@ Term::Drawille - Draw to your terminal using Braille characters
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 SYNOPSIS
 
   use Term::Drawille;
 
-  binmode STDOUT, ':encoding(utf8)';
   my $canvas = Term::Drawille->new(
-    width  => 400,
-    height => 400,
+    width  => 40,
+    height => 40,
   );
 
-  for(my $i = 0; $i < 400; $i++) {
+  for(my $i = 0; $i < 40; $i++) {
     $canvas->set($i, $i, 1);
   }
 
@@ -31,7 +30,6 @@ version 0.01
 L<Text::Drawille> makes use of Braille characters to allow you to draw
 lines, circles, pictures, etc, to your terminal with a surprising amount
 of precision.  It's based on a Python library (L<https://github.com/asciimoo/drawille>);
-its page has some screenshots that demonstrate what it and this module can accomplish.
 
 =head1 METHODS
 
@@ -49,6 +47,11 @@ Specify the width of the canvas in pixels.
 
 Specify the height of the canvas in pixels.
 
+=head3 borderStyle
+
+Optionally set to draw a border around chart.
+Valid styles are "simple", "double", "shadow", "thin" and "thick";
+
 =head2 $canvas->set($x, $y, [$value])
 
 Sets the value of the pixel at (C<$x>, C<$y>) to C<$value>.  If
@@ -61,8 +64,18 @@ the pixel at the given position.
 
 Draws the canvas as a string of Braille characters and returns it.
 Note that the string consists of Unicode B<characters> and not raw bytes;
+The line C<use open ":std", ":encoding(UTF-8)";> in this version allows 
+the encoding to be handled for printing to the terminal using
+C<$canvas->draw($row,$colomn)>
+
+
+=head2 $canvas->as_string
+
+Draws the canvas as a string of Braille characters and returns it.
+Note that the string consists of Unicode B<characters> and not raw bytes;
 this means you'll likely have to encode it before sending it to the terminal.
 This may change in future releases.
+
 
 =head1 SEE ALSO
 
