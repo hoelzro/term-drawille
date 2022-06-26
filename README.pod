@@ -77,7 +77,7 @@ If C<$canvas-E<gt>{borderStyle}> is specified, then also prints a border
 =begin HTML
 
 <p><img src="https://github.com/saiftynet/term-drawille/edit/master/spinningcube.gif"
-width="500" height="250" alt="spinningcube" /></p>
+width="500" height="250" alt="spinningcube" />Spinning Cube</p>
 
 =end HTML
 
