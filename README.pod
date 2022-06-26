@@ -66,13 +66,20 @@ Draws the canvas as a string of Braille characters and returns it.
 Note that the string consists of Unicode B<characters> and not raw bytes;
 The line C<use open ":std", ":encoding(UTF-8)";> in this version allows 
 the encoding to be handled for printing to the terminal using
-C<$canvas->draw($row,$column)> (see below)
+C<$canvas-E<gt>draw($row,$column)> (see below)
 
 
 =head3 $canvas->draw(), $canvas->draw($row,$column)
 
 Draws the canvas at specific row and column in ANSI terminals.
-If C<$canvas->{borderStyle}> is specified, then also prints a border
+If C<$canvas-E<gt>{borderStyle}> is specified, then also prints a border
+
+=begin HTML
+
+<p><img src="https://github.com/saiftynet/term-drawille/edit/master/spinningcube.gif"
+width="500" height="250" alt="spinningcube" /></p>
+
+=end HTML
 
 
 =head1 SEE ALSO
