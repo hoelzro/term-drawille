@@ -39,7 +39,7 @@ sub set{
 	return unless(($x<$self->{width})&&($x>=0)&&($y<$self->{height})&&($x>=0));
 	
 	#convert coordinates to character / pixel offset position
-	my $chrX=$x/2;my $xOffset=$x- $chrX*2; (
+	my $chrX=$x/2;my $xOffset=$x- $chrX*2; 
 	my $chrY=$y/4;my $yOffset=$y- $chrY*4;
 	$self->{grid}->[$chrY]->[$chrX]=$value?         # in $value is false, unset, or else set pixel
 	   chr( ord($self->{setPix}  -> [$xOffset]->[$yOffset]) | ord($self->{grid}->[$chrY]->[$chrX]) ) :
