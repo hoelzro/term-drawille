@@ -47,12 +47,12 @@ Specify the width of the canvas in pixels.
 
 Specify the height of the canvas in pixels.
 
-=head3 borderStyle
+=head3 borderStyle,borderColour  
 
 Optionally set to draw a border around chart.
 Valid styles are "simple", "double", "shadow", "thin" and "thick";
 
-=head2 $canvas->set($x, $y, [$value])
+=head3 $canvas->set($x, $y, [$value])
 
 Sets the value of the pixel at (C<$x>, C<$y>) to C<$value>.  If
 C<$value> is omitted, it defaults to C<1>.
@@ -60,21 +60,19 @@ C<$value> is omitted, it defaults to C<1>.
 The $value is interpreted as a boolean: whether or not to draw
 the pixel at the given position.
 
-=head2 $canvas->as_string
+=head3 $canvas->as_string
 
 Draws the canvas as a string of Braille characters and returns it.
 Note that the string consists of Unicode B<characters> and not raw bytes;
 The line C<use open ":std", ":encoding(UTF-8)";> in this version allows 
 the encoding to be handled for printing to the terminal using
-C<$canvas->draw($row,$colomn)>
+C<$canvas->draw($row,$column)> (see below)
 
 
-=head2 $canvas->as_string
+=head3 $canvas->draw(), $canvas->draw($row,$column)
 
-Draws the canvas as a string of Braille characters and returns it.
-Note that the string consists of Unicode B<characters> and not raw bytes;
-this means you'll likely have to encode it before sending it to the terminal.
-This may change in future releases.
+Draws the canvas at specific row and column in ANSI terminals.
+If $canvas->{borderStyle} is specified, then also prints a border
 
 
 =head1 SEE ALSO
