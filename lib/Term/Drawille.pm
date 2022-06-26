@@ -1,132 +1,76 @@
-## no critic (RequireUseStrict)
 package Term::Drawille;
 
-## use critic (RequireUseStrict)
-use strict;
-use warnings;
+use strict;use warnings;
 use utf8;
-use charnames ();
+use open ":std", ":encoding(UTF-8)";
+use integer;
+use Algorithm::Line::Bresenham;
 
-my %BRAILLE_MAPPING; # 12374568 => braille char
-my $VERT_PIXELS_PER_CELL = 4;
-my $HORZ_PIXELS_PER_CELL = 2;
-
-$BRAILLE_MAPPING{'00000000'} = '⠀';
-for my $value (1 .. 255) {
-    $value     = sprintf('%08b', $value);
-    my @values = unpack('A' x 8, $value);
-
-    # the braille character names order the dots as such:
-    #
-    #   1 4
-    #   2 5
-    #   3 6
-    #   7 8
-    #
-
-    my @indices = ( 1, 2, 3, 7, 4, 5, 6, 8 );
-    my $char_name = 'BRAILLE PATTERN DOTS-' . join('', sort(map { $indices[$_] } grep {
-        $values[$_]
-    } ( 0 .. 7 )));
-
-    $BRAILLE_MAPPING{$value} = charnames::string_vianame($char_name);
+sub new{
+    my ( $class, %params ) = @_;     #  params are width and height in pixels
+    my $self={width=>$params{width},height=>$params{height}};
+                                     # grid of blank braille characters made of the size specified
+    $self->{grid}=[map {[('⠀')x ($params{width}/2+($params{width}%2?1:0))]}(0..($params{height}/4+($params{height}%4?1:0)))];
+                  # arrays containing Braille characters to bitwise OR or AND to set or unset individual pixels
+    $self->{setPix}=[['⡀','⠄','⠂','⠁'],['⢀','⠠','⠐','⠈']];
+    $self->{unsetPix}=[['⢿','⣻','⣽','⣾'],['⡿','⣟','⣯','⣷']];
+    bless $self,$class;
+    return $self;
 }
 
-sub new {
-    my ( $class, %params ) = @_;
-
-    my ( $width, $height ) = @params{qw/width height/};
-
-    unless($width % $HORZ_PIXELS_PER_CELL == 0) {
-        $width = ($width - ($width % $HORZ_PIXELS_PER_CELL)) + $HORZ_PIXELS_PER_CELL;
-    }
-
-    unless($height % $VERT_PIXELS_PER_CELL == 0) {
-        $height = ($height - ($height % $VERT_PIXELS_PER_CELL)) + $VERT_PIXELS_PER_CELL;
-    }
-
-    my $grid = [ map { [ (0) x $width ] } ( 1 .. $height ) ];
-
-    return bless {
-        grid => $grid,
-    }, $class;
+sub draw{
+	my $self=shift;
+	print $self->as_string();
 }
 
-sub _grid {
-    my ( $self ) = @_;
 
-    return $self->{'grid'};
+sub as_string{
+	my $self=shift;
+	my $str="";
+	$str.=join("",@$_)."\n" foreach (reverse @{$self->{grid}});
+	return $str;
 }
 
-sub _width {
-    my ( $self ) = @_;
-
-    return scalar(@{ $self->_grid->[0] });
-}
-
-sub _height {
-    my ( $self ) = @_;
-
-    return scalar(@{ $self->_grid });
-}
-
-sub set {
-    my ( $self, $x, $y, $value );
-
+sub set{
     push @_, 1 if @_ == 3;
-    ( $self, $x, $y, $value ) = @_;
-
-    $self->_grid->[$y][$x] = $value ? 1 : 0;
+	my ($self,$x,$y,$value)=@_;
+	
+	#exit if out of bounds
+	return unless(($x<$self->{width})&&($x>=0)&&($y<$self->{height})&&($x>=0));
+	
+	#convert coordinates to character / pixel offset position
+	my $chrX=$x/2;my $xOffset=$x- $chrX*2; (
+	my $chrY=$y/4;my $yOffset=$y- $chrY*4;
+	$self->{grid}->[$chrY]->[$chrX]=$value?         # in $value is false, unset, or else set pixel
+	   chr( ord($self->{setPix}  -> [$xOffset]->[$yOffset]) | ord($self->{grid}->[$chrY]->[$chrX]) ) :
+	   chr( ord($self->{unsetPix}-> [$xOffset]->[$yOffset]) & ord($self->{grid}->[$chrY]->[$chrX])
+	);
 }
 
-sub _each_cell_row {
-    my ( $self, $action ) = @_;
-
-    for my $row_num (0 .. ($self->_height / $VERT_PIXELS_PER_CELL) - 1) {
-        $action->($row_num);
-    }
+sub unset{
+	my ($self,$point)=@_;
+	$self->set($point,0);
 }
 
-# $action is called with a sequence of $VERT_PIXELS_PER_CELL * $HORZ_PIXELS_PER_CELL
-# values, going from left-to-right, top-to-bottom.
-sub _each_cell_column {
-    my ( $self, $row_num, $action ) = @_;
-
-    my $grid = $self->_grid;
-    for my $col_num (0 .. ($self->_width / $HORZ_PIXELS_PER_CELL) - 1) {
-        my @values;
-
-        for my $col_offset (0 .. $HORZ_PIXELS_PER_CELL - 1) {
-            for my $row_offset (0 .. $VERT_PIXELS_PER_CELL - 1) {
-                push @values, $grid->[$row_num * $VERT_PIXELS_PER_CELL + $row_offset][$col_num * $HORZ_PIXELS_PER_CELL + $col_offset];
-            }
-        }
-
-        $action->(@values);
-    }
+sub pixel{
+	
+	
 }
 
-sub as_string {
-    my ( $self ) = @_;
+sub line{
+	my ($self,$x1,$y1,$x2,$y2,$value)=@_;
+	my @points=Algorithm::Line::Bresenham::line($x1,$y1,$x2,$y2);
+	$self->set(@$_) foreach (@points);
+}
 
-    my $result = '';
-
-    $self->_each_cell_row(sub {
-        my ( $row_num ) = @_;
-
-        $self->_each_cell_column($row_num, sub {
-            my @values = @_;
-
-            $result .= $BRAILLE_MAPPING{ join('', @values) };
-        });
-
-        $result .= "\n";
-    });
-
-    return $result;
+sub circle{
+	my ($self,$x1,$y1,$radius,$value)=@_;
+	my @points=Algorithm::Line::Bresenham::circle($x1,$y1,$radius);
+	$self->set(@$_,$value) foreach (@points);
 }
 
 1;
+
 
 __END__
 
