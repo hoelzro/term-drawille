@@ -10,11 +10,11 @@ sub new{
     my ( $class, %params ) = @_;     #  params are width and height in pixels
     my $self={width=>$params{width},height=>$params{height}};
                                      # grid of blank braille characters made of the size specified
-    $self->{grid}=[map {[('⠀')x ($params{width}/2+($params{width}%2?1:0))]}(0..($params{height}/4+($params{height}%4?1:0)))];
-                  # arrays containing Braille characters to bitwise OR or AND to set or unset individual pixels
     $self->{setPix}=[['⡀','⠄','⠂','⠁'],['⢀','⠠','⠐','⠈']];
     $self->{unsetPix}=[['⢿','⣻','⣽','⣾'],['⡿','⣟','⣯','⣷']];
     bless $self,$class;
+    
+    $self->clear;
     return $self;
 }
 
@@ -42,17 +42,33 @@ sub set{
 	my $chrX=$x/2;my $xOffset=$x- $chrX*2; 
 	my $chrY=$y/4;my $yOffset=$y- $chrY*4;
 	$self->{grid}->[$chrY]->[$chrX]=$value?         # in $value is false, unset, or else set pixel
-	   chr( ord($self->{setPix}  -> [$xOffset]->[$yOffset]) | ord($self->{grid}->[$chrY]->[$chrX]) ) :
-	   chr( ord($self->{unsetPix}-> [$xOffset]->[$yOffset]) & ord($self->{grid}->[$chrY]->[$chrX])
-	);
+	   (chr( ord($self->{setPix}  -> [$xOffset]->[$yOffset]) | ord($self->{grid}->[$chrY]->[$chrX]) ) ):
+	   (chr( ord($self->{unsetPix}-> [$xOffset]->[$yOffset]) & ord($self->{grid}->[$chrY]->[$chrX])));
 }
 
 sub unset{
-	my ($self,$point)=@_;
-	$self->set($point,0);
+	my ($self,$x,$y)=@_;
+	$self->set($x,$y,0);
 }
 
-sub pixel{
+sub pixel{ #get pixel value at coordinates
+	my ($self,$x,$y,$value)=@_;
+	
+	#exit if out of bounds
+	return unless(($x<$self->{width})&&($x>=0)&&($y<$self->{height})&&($x>=0));
+	
+	#convert coordinates to character / pixel offset position
+	my $chrX=$x/2;my $xOffset=$x- $chrX*2; 
+	my $chrY=$y/4;my $yOffset=$y- $chrY*4;
+	my $orOp=ord($self->{setPix}-> [$xOffset]->[$yOffset]) & ord($self->{grid}->[$chrY]->[$chrX]);
+	return $orOp == ord('⠀')?0:1;
+	
+}
+
+sub clear{
+	my $self=shift;
+    $self->{grid}=[map {[('⠀')x ($self->{width}/2+($self->{width}%2?1:0))]}(0..($self->{height}/4+($self->{height}%4?1:0)))];
+                  # arrays containing Braille characters to bitwise OR or AND to set or unset individual pixels
 	
 	
 }
